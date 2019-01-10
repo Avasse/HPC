@@ -22,4 +22,6 @@ if __name__ == '__main__':
 
     # lance les calculs
     tester_fonction("sequentiel", lambda : hpcThreads.fiboSequentiel(NB_DATA))
-    # TODO
+    tester_fonction("bloc", lambda : hpcThreads.fiboBlocs(NB_DATA))
+    tester_fonction("cyclique2", lambda : hpcThreads.fiboCyclique2(NB_DATA))
+    tester_fonction("cycliqueN", lambda : hpcThreads.fiboCycliqueN(NB_DATA, 5))

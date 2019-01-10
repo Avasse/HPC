@@ -11,10 +11,14 @@ namespace Hello {
 
   void hello() {
     // affiche l'id du thread principal
-    noyauCalcul();
+    // noyauCalcul();
 
     // exécute le noyau de calcul en parallèle sur 2 threads
-    // TODO
+    std::thread t1(Hello::noyauCalcul);
+    std::thread t2(Hello::noyauCalcul);
+
+    t1.join();
+    t2.join();
 
   }
 
