@@ -17,6 +17,7 @@ setup(
     version='0.1.0',
     ext_modules=exts,
     scripts=[
+        'scripts/hpcMpiIntegralPar.py',
         'scripts/hpcMpiImageRun.sh',
         'scripts/hpcMpiImageSeq.py',
         'scripts/hpcMpiPlot.py',
