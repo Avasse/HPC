@@ -18,22 +18,24 @@ if __name__ == '__main__':
 
     # compute
     comm = MPI.COMM_WORLD
-    worldRank = comm.Get_rank()
-    worldSize = comm.Get_size()
-    rate = 1/worldSize
+    i = comm.Get_rank()
+    n = comm.Get_size()
+    
+    ai = i / n
+    bi = (i + 1) / n
+    
     node_result = numpy.empty(1, dtype=float)
     
-    node_result[0] = hpcMpi.compute(hpcMpi.fPi, (worldRank*rate),(worldRank+1)*rate, step)
-    
+    node_result[0] = hpcMpi.compute(hpcMpi.fPi, ai , bi, step)
     
     all_results = numpy.empty(1, dtype=float)
-    comm.Reduce(node_result, all_results,op=MPI.SUM)
+    comm.Reduce(node_result, all_results, op = MPI.SUM)
 
     t1 = t.time()
 
     # output result
     time = t1 - t0
-    if worldRank == 0 :
-      print(step, worldSize, all_results[0], time)
+    if i == 0 :
+      print(step, n, all_results[0], time)
 
   
