@@ -8,19 +8,16 @@
 
 // output data as a grayscale PNM image
 void writePnm(std::ostream &os, int width, int height,
-        const std::vector<unsigned char> & data)
-{
+        const std::vector<unsigned char> & data) {
     os << "P2" << std::endl;
     os << width << ' ' << height << std::endl;
     os << "255" << std::endl;
     for (unsigned char pixel : data) os << (unsigned)pixel << ' ';
 }
 
-int main(int argc, char ** argv)
-{
+int main(int argc, char ** argv) {
     // check command line arguments
-    if (argc!=4 and argc!=3)
-    {
+    if (argc!=4 and argc!=3) {
         std::cout << "usage; " << argv[0]
             << " <width> <height> [PNM filename] \n";
         return -1;
@@ -37,19 +34,18 @@ int main(int argc, char ** argv)
     double startTime = omp_get_wtime();
 
     // compute image data
-    // TODO
-    for (int x=0; x<width; x++)
-    {
-        for (int y=0; y<height; y++)
-        {
+    for (int x = 0; x < width; x++) {
+        #pragma omp parallel for schedule(static, 50) num_threads(3)
+        for (int y = 0; y < height; y++) {
             // diagonal gradient
             // TODO remove that
-            double t = (x+y) / sqrt(width*width + height*height);
-            double f = 2.0;
-            ind(x,y) = 127.0 * (1 + cos(2.0*M_PI*f*t));
+            //double t = (x+y) / sqrt(width*width + height*height);
+            //double f = 2.0;
+            //ind(x,y) = 127.0 * (1 + cos(2.0*M_PI*f*t));
 
             // put the color of the thread
-            // TODO
+            int i = omp_get_thread_num();
+            ind(x,y) = 127.0 * i;
         }
     }
 
@@ -59,8 +55,7 @@ int main(int argc, char ** argv)
         << std::endl;
 
     // write image in a file
-    if (argc==4)
-    {
+    if (argc==4) {
         std::ofstream ofs(argv[3]);
         writePnm(ofs, width, height, data);
     }
